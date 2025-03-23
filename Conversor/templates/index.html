@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extraer Texto de Archivos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+   
+</head>
+<body>
+    <div class="container">
+        <h2>Subir Archivo (PPTX o PDF)</h2>
+        <p>Selecciona un archivo de PowerPoint (.pptx) o PDF (.pdf) para extraer su texto.</p>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".pptx, .pdf" required>
+            <br>
+            <button type="submit">Extraer Texto</button>
+        </form>
+
+        <!-- Animación de carga -->
+        <div id="loader" class="loader"></div>
+
+        {% if texto %}
+            <h3>Texto Extraído:</h3>
+            <div class="scroll-container">
+                <pre id="textoExtraido">{{ texto }}</pre>
+            </div>
+
+            <button onclick="copiarTexto()">Copiar Texto</button>
+            <br>
+            <a href="{{ url_for('descargar') }}" download>Descargar Texto</a>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>Desarrollado por <a href="mailto:ghamisoluciones@gmail.com">ghami_soluciones</a></p>
+    </footer>
+
+    <script>
+        // Mostrar animación de carga al enviar el archivo
+        const form = document.querySelector('form');
+        const loader = document.getElementById('loader');
+
+        form.addEventListener('submit', () => {
+            loader.style.display = 'block';
+        });
+
+        // Función para copiar el texto al portapapeles
+        function copiarTexto() {
+            const texto = document.getElementById("textoExtraido").innerText;
+            navigator.clipboard.writeText(texto).then(() => {
+                alert("Texto copiado al portapapeles!");
+            }).catch(err => {
+                alert("Hubo un error al copiar el texto: " + err);
+            });
+        }
+    </script>
+</body>
+</html>
